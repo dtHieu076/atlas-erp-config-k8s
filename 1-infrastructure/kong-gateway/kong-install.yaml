@@ -7,15 +7,19 @@ spec:
   project: default
   source:
     repoURL: 'https://charts.konghq.com'
-    targetRevision: 2.38.0
     chart: kong
+    targetRevision: 2.38.0 # Dùng bản mới của file 2
+    helm:
+      values: |
+        ingressController:
+          enabled: true
+          installCRDs: true # Giữ tính năng tự cài CRD của file 1
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: kong
+    namespace: argocd # Giữ nguyên ở namespace argocd để không bị lỗi lạc mất Secret
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
