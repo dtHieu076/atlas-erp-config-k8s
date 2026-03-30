@@ -39,13 +39,6 @@ spec:
             name: ai-service
             port:
               number: 80
-      - path: /minio
-        pathType: Prefix
-        backend:
-          service:
-            name: minio-service
-            port:
-              number: 9001
       - path: /admin
         pathType: Prefix
         backend:

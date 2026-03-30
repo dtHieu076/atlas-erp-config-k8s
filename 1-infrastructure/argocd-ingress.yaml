@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-ingress
+  namespace: argocd # Quan trọng: ArgoCD nằm ở namespace này
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod" # Gọi Cert-manager
+    konghq.com/strip-path: "false"
+    # ArgoCD cần cấu hình này để chạy mượt qua Proxy
+    konghq.com/protocols: "https" 
+spec:
+  ingressClassName: kong
+  tls:
+  - hosts:
+    - argo.103.72.99.195.nip.io # Tên miền riêng cho ArgoCD
+    secretName: argocd-server-tls
+  rules:
+  - host: argo.103.72.99.195.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: argocd-server
+            port:
+              number: 443 # Port mặc định của service argocd-server
