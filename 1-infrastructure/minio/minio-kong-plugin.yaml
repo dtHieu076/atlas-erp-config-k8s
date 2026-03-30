@@ -5,6 +5,7 @@ metadata:
   namespace: default
   annotations:
     argocd.argoproj.io/sync-wave: "5" # Bắt buộc đợi Kong cài xong
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 plugin: response-transformer
 config:
   remove:
