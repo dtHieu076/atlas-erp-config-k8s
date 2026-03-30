@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  template:
+    spec:
+      containers:
+      - name: argocd-server
+        # Chúng ta định nghĩa lại các đối số chạy lệnh để có thêm --insecure
+        command:
+        - argocd-server
+        - --insecure
+        - --staticassets
+        - /shared/app
