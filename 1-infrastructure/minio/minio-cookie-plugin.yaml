@@ -3,6 +3,8 @@ kind: KongPlugin
 metadata:
   name: fix-minio-cookie
   namespace: default
+  annotations:
+    argocd.argoproj.io/sync-wave: "5" # Bắt buộc đợi Kong cài xong
 plugin: post-function
 config:
   header_filter:
@@ -23,4 +25,3 @@ config:
         end
         kong.response.set_header("Set-Cookie", new_cookies)
       end
-
