@@ -3,7 +3,7 @@ kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
   annotations:
-    argocd.argoproj.io/sync-wave: "5" # Đợi Cert-Manager cài xong mới chạy file này
+    argocd.argoproj.io/sync-wave: "-1" # Đợi Cert-Manager cài xong mới chạy file này
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   acme:
