@@ -6,10 +6,9 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     kubernetes.io/ingress.class: "kong"
-    konghq.com/protocol: "https" # Ép Kong dùng HTTPS để nói chuyện với backend
+    # Quan trọng: Bảo Kong nói chuyện với ArgoCD bằng HTTP thường (vì đã có --insecure)
+    konghq.com/protocol: "http" 
     konghq.com/strip-path: "false"
-    # Thêm dòng dưới đây để xử lý lỗi redirect
-    ingress.kubernetes.io/ssl-redirect: "true" 
 spec:
   ingressClassName: kong
   tls:
@@ -26,4 +25,4 @@ spec:
           service:
             name: argocd-server
             port:
-              number: 443
+              number: 80 # Đổi từ 443 sang 80 vì ArgoCD server giờ chạy mode insecure
