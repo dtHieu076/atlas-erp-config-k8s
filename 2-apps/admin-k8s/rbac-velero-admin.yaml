@@ -1,0 +1,32 @@
+# 1. T?o ServiceAccount riêng cho Admin (? namespace default)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-sa
+  namespace: default
+---
+# 2. Ð?nh nghia quy?n t?o Backup (? namespace velero)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: velero
+  name: velero-backup-creator
+rules:
+- apiGroups: ["velero.io"]
+  resources: ["backups"]
+  verbs: ["create", "get", "list", "watch"]
+---
+# 3. G?n quy?n cho tài kho?n admin-sa
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: velero-backup-creator-binding
+  namespace: velero
+subjects:
+- kind: ServiceAccount
+  name: admin-sa
+  namespace: default # Tr? v? admin-sa ? namespace default
+roleRef:
+  kind: Role
+  name: velero-backup-creator
+  apiGroup: rbac.authorization.k8s.io

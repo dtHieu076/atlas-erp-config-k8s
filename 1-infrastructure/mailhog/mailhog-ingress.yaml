@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mailhog-ingress
+  namespace: default
+  annotations:
+    konghq.com/strip-path: "false"
+    konghq.com/plugins: remove-minio-iframe-block
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: kong
+  tls:
+  - hosts:
+    - mail.103.72.99.195.nip.io
+    secretName: mailhog-tls-secret
+  rules:
+  - host: mail.103.72.99.195.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mailhog-service
+            port:
+              number: 8025
+

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mail-deployment
+  labels:
+    app: mail-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mail-api
+  template:
+    metadata:
+      labels:
+        app: mail-api
+      annotations:
+        # Giúp Velero nh?n di?n volume d? backup
+        backup.velero.io/backup-volumes: backup-storage
+    spec:
+      containers:
+      - name: mail-container
+        image: dthieudocker/mail-service:k8s_v3
+        imagePullPolicy: Always  # Ép K8s luôn kéo image m?i nh?t n?u b?n có l? ghi dè tag v2
+        ports:
+        - containerPort: 8080
+        env:
+        # ==========================================================
+        # PH?N THÊM M?I: Ép Spring Boot k?t n?i sang MailHog Service
+        # ==========================================================
+        - name: SPRING_MAIL_HOST
+          value: "mailhog-service"
+        - name: SPRING_MAIL_PORT
+          value: "1025"
+        # ==========================================================
+        volumeMounts:
+        # Mount vào dúng thu m?c Java ghi file
+        - name: backup-storage
+          mountPath: /app/backups
+      volumes:
+      - name: backup-storage
+        persistentVolumeClaim:
+          claimName: shared-backup-pvc

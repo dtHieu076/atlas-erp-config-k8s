@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-standalone-ingress
+  namespace: default
+  annotations:
+    konghq.com/strip-path: "false"
+    konghq.com/plugins: remove-minio-iframe-block, fix-minio-cookie
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: kong
+  tls: 
+  - hosts:
+    - minio.103.72.99.195.nip.io
+    secretName: minio-tls-secret 
+  rules:
+  - host: minio.103.72.99.195.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: minio-service
+            port:
+              number: 9001
+

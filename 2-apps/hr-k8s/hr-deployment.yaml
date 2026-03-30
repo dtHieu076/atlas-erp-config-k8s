@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hr-deployment
+  labels:
+    app: hr-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hr-api
+  template:
+    metadata:
+      labels:
+        app: hr-api
+      annotations:
+        # Giúp Velero nh?n di?n volume d? backup
+        backup.velero.io/backup-volumes: backup-storage
+    spec:
+      containers:
+      - name: hr-container
+        image: dthieudocker/hr-service:k8s_v4
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        # Mount vào dúng thu m?c Java ghi file
+        - name: backup-storage
+          mountPath: /app/backups
+      volumes:
+      - name: backup-storage
+        persistentVolumeClaim:
+          claimName: shared-backup-pvc

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workflow-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workflow-api
+  template:
+    metadata:
+      labels:
+        app: workflow-api
+    spec:
+      containers:
+      - name: workflow-container
+        image: dthieudocker/workflow-service:k8s_v2
+        ports:
+        - containerPort: 8080

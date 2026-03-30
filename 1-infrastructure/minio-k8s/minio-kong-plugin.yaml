@@ -1,0 +1,15 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: remove-minio-iframe-block
+  namespace: default
+plugin: response-transformer
+config:
+  remove:
+    headers:
+    - X-Frame-Options
+    - Content-Security-Policy
+  add:
+    headers:
+    - "Content-Security-Policy: frame-ancestors 'self' *;"
+

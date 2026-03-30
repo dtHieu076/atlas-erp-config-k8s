@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-deployment
+  labels:
+    app: admin-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-api
+  template:
+    metadata:
+      labels:
+        app: admin-api
+      annotations:
+        backup.velero.io/backup-volumes: backup-storage
+    spec:
+      serviceAccountName: admin-sa # <--- B?N CH? C?N THÊM DÒNG NÀY
+      containers:
+      - name: admin-container
+        image: dthieudocker/admin-service:k8s_v14
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: backup-storage
+          mountPath: /app/backups
+      volumes:
+      - name: backup-storage
+        persistentVolumeClaim:
+          claimName: shared-backup-pvc

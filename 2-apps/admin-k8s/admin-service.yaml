@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-service # Tên service d? các service khác g?i t?i (ví d?: http://admin-service)
+spec:
+  selector:
+    app: admin-api # Ph?i kh?p hoàn toàn v?i labels trong admin-deployment.yaml
+  ports:
+    - protocol: TCP
+      port: 80         # C?ng c?a Service (c?ng ?o)
+      targetPort: 8080 # C?ng th?c t? ?ng d?ng Spring Boot dang ch?y trong Container
+  type: ClusterIP      # Ch? truy c?p n?i b? trong Cluster

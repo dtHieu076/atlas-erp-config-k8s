@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-activity-deployment
+  labels:
+    app: user-activity-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-activity-api
+  template:
+    metadata:
+      labels:
+        app: user-activity-api
+      annotations:
+        # Giúp Velero nh?n di?n volume d? backup
+        backup.velero.io/backup-volumes: backup-storage
+    spec:
+      containers:
+      - name: user-activity-container
+        image: dthieudocker/user_activity_service:k8s_v1 # <-- Ð?i tag k8s_v... t?i dây
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        # Mount vào dúng thu m?c Java ghi file
+        - name: backup-storage
+          mountPath: /app/backups
+      volumes:
+      - name: backup-storage
+        persistentVolumeClaim:
+          claimName: shared-backup-pvc

@@ -1,0 +1,76 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: erp-platform-ingress
+  annotations:
+    konghq.com/strip-path: "true"
+spec:
+  ingressClassName: kong
+  rules:
+  - http:
+      paths:
+      - path: /hr
+        pathType: Prefix
+        backend:
+          service:
+            name: hr-service
+            port:
+              number: 80
+
+      - path: /organization
+        pathType: Prefix
+        backend:
+          service:
+            name: organization-service
+            port:
+              number: 80
+
+      - path: /workflow
+        pathType: Prefix
+        backend:
+          service:
+            name: workflow-service
+            port:
+              number: 80
+      - path: /ai
+        pathType: Prefix
+        backend:
+          service:
+            name: ai-service
+            port:
+              number: 80
+      - path: /minio
+        pathType: Prefix
+        backend:
+          service:
+            name: minio-service
+            port:
+              number: 9001
+      - path: /admin
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-service
+            port:
+              number: 80
+      - path: /config
+        pathType: Prefix
+        backend:
+          service:
+            name: config-server-service
+            port:
+              number: 8888
+      - path: /user-activity
+        pathType: Prefix
+        backend:
+          service:
+            name: user-activity-service
+            port:
+              number: 80
+      - path: /mail
+        pathType: Prefix
+        backend:
+          service:
+            name: mail-service
+            port:
+              number: 80

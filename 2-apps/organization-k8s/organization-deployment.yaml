@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: organization-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: organization-api
+  template:
+    metadata:
+      labels:
+        app: organization-api
+    spec:
+      containers:
+      - name: organization-container
+        image: dthieudocker/organization-service:k8s_v3
+        ports:
+        - containerPort: 8080
