@@ -6,8 +6,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     kubernetes.io/ingress.class: "kong"
-    # Quan trọng: Bảo Kong nói chuyện với ArgoCD bằng HTTP thường (vì đã có --insecure)
-    konghq.com/protocol: "http" 
+    konghq.com/protocol: "https"          # SỬA Ở ĐÂY: Bắt buộc dùng https để nói chuyện với ArgoCD
     konghq.com/strip-path: "false"
 spec:
   ingressClassName: kong
@@ -25,4 +24,4 @@ spec:
           service:
             name: argocd-server
             port:
-              number: 80 # Đổi từ 443 sang 80 vì ArgoCD server giờ chạy mode insecure
+              number: 443                 # SỬA Ở ĐÂY: Trỏ vào port 443 của ArgoCD
