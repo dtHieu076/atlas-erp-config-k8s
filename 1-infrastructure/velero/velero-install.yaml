@@ -17,10 +17,11 @@ spec:
           repository: velero/velero
           tag: v1.13.0
 
-        kubectl:
-          image:
-            repository: alpine/k8s
-            tag: 1.30.0
+        # --- ĐÂY LÀ DÒNG QUYẾT ĐỊNH ---
+        # Tắt cái Job tự động nâng cấp CRD đi. 
+        # Helm 3 và ArgoCD vẫn sẽ tự động cài bộ CRD gốc cho bạn cực kỳ êm ái!
+        upgradeCRDs: false 
+        # -------------------------------
 
         initContainers:
           - name: velero-plugin-for-aws
@@ -29,7 +30,6 @@ spec:
             volumeMounts:
               - mountPath: /target
                 name: plugins
-
         configuration:
           backupStorageLocation:
             - name: default
@@ -39,39 +39,16 @@ spec:
                 region: minio
                 s3ForcePathStyle: "true"
                 s3Url: http://minio-service.default.svc.cluster.local:9000
-
         credentials:
           existingSecret: cloud-credentials
-
         deployNodeAgent: true
         snapshotsEnabled: false
-
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: velero
-
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: velero
-
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: cloud-credentials
-  namespace: velero
-type: Opaque
-stringData: 
-  cloud: |
-    [default]
-    aws_access_key_id=minioadmin
-    aws_secret_access_key=minioadmin123
