@@ -4,15 +4,24 @@ metadata:
   name: velero
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "10" # Cài cuối cùng để đảm bảo MinIO đã sống
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   project: default
   source:
     repoURL: 'https://vmware-tanzu.github.io/helm-charts'
-    targetRevision: 5.3.0 # Tương đương Velero CLI v1.13
+    targetRevision: 5.3.0
     chart: velero
     helm:
       values: |
+        image:
+          repository: velero/velero
+          tag: v1.13.0
+
+        kubectl:
+          image:
+            repository: registry.k8s.io/kubectl
+            tag: v1.30.0
+
         initContainers:
           - name: velero-plugin-for-aws
             image: velero/velero-plugin-for-aws:v1.9.0
@@ -20,6 +29,7 @@ spec:
             volumeMounts:
               - mountPath: /target
                 name: plugins
+
         configuration:
           backupStorageLocation:
             - name: default
@@ -29,13 +39,17 @@ spec:
                 region: minio
                 s3ForcePathStyle: "true"
                 s3Url: http://minio-service.default.svc.cluster.local:9000
+
         credentials:
           existingSecret: cloud-credentials
+
         deployNodeAgent: true
         snapshotsEnabled: false
+
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: velero
+
   syncPolicy:
     automated:
       prune: true
