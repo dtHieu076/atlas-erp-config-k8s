@@ -1,0 +1,27 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: fix-argocd-cookie
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+plugin: post-function
+config:
+  header_filter:
+    - |
+      local cookies = kong.response.get_header("Set-Cookie")
+      if type(cookies) == "string" then
+        if not string.find(cookies, "SameSite=None") then
+          kong.response.set_header("Set-Cookie", cookies .. "; SameSite=None; Secure")
+        end
+      elseif type(cookies) == "table" then
+        local new_cookies = {}
+        for i, cookie in ipairs(cookies) do
+          if not string.find(cookie, "SameSite=None") then
+            table.insert(new_cookies, cookie .. "; SameSite=None; Secure")
+          else
+            table.insert(new_cookies, cookie)
+          end
+        end
+        kong.response.set_header("Set-Cookie", new_cookies)
+      end
