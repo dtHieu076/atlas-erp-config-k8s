@@ -19,8 +19,8 @@ spec:
 
         kubectl:
           image:
-            repository: registry.k8s.io/kubectl
-            tag: v1.30.0
+            repository: alpine/k8s
+            tag: 1.30.0
 
         initContainers:
           - name: velero-plugin-for-aws
