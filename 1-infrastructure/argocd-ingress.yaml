@@ -8,6 +8,7 @@ metadata:
     kubernetes.io/ingress.class: "kong"
     konghq.com/protocol: "http"         # Trả về http
     konghq.com/strip-path: "false"
+    konghq.com/plugins: remove-argocd-iframe-block
 spec:
   ingressClassName: kong
   tls:

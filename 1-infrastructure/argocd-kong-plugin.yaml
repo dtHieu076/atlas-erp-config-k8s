@@ -1,0 +1,18 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: remove-argocd-iframe-block
+  namespace: argocd         # Lưu ý: Phải cùng namespace với ArgoCD Ingress
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+plugin: response-transformer
+config:
+  remove:
+    headers:
+    - X-Frame-Options
+    - Content-Security-Policy
+  add:
+    headers:
+    # Cho phép nhúng iframe ở bất cứ đâu (*). 
+    # Nếu muốn bảo mật hơn khi lên Production, bạn thay dấu * bằng http://localhost:3000
+    - "Content-Security-Policy: frame-ancestors 'self' *;"
