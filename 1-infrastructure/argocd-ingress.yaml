@@ -6,7 +6,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     kubernetes.io/ingress.class: "kong"
-    konghq.com/protocol: "https"          # SỬA Ở ĐÂY: Bắt buộc dùng https để nói chuyện với ArgoCD
+    konghq.com/protocol: "http"         # Trả về http
     konghq.com/strip-path: "false"
 spec:
   ingressClassName: kong
@@ -24,4 +24,4 @@ spec:
           service:
             name: argocd-server
             port:
-              number: 443                 # SỬA Ở ĐÂY: Trỏ vào port 443 của ArgoCD
+              number: 80                # Trả về port 80
