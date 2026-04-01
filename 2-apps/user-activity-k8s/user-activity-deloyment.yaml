@@ -14,16 +14,14 @@ spec:
       labels:
         app: user-activity-api
       annotations:
-        # Giúp Velero nh?n di?n volume d? backup
         backup.velero.io/backup-volumes: backup-storage
     spec:
       containers:
       - name: user-activity-container
-        image: dthieudocker/user_activity_service:k8s_v1 # <-- Ð?i tag k8s_v... t?i dây
+        image: dthieudocker/user_activity_service:k8s_v1
         ports:
         - containerPort: 8080
         volumeMounts:
-        # Mount vào dúng thu m?c Java ghi file
         - name: backup-storage
           mountPath: /app/backups
       volumes:
