@@ -2,12 +2,24 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: erp-platform-ingress
+  namespace: default
   annotations:
     konghq.com/strip-path: "true"
+    # Gọi cert-manager cấp chứng chỉ SSL
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: kong
+  
+  # Cấu hình SSL cho domain nip.io
+  tls:
+  - hosts:
+    - api.103.72.99.195.nip.io
+    secretName: erp-platform-tls-secret
+    
   rules:
-  - http:
+  # Áp dụng domain nip.io cho tất cả các API bên dưới
+  - host: api.103.72.99.195.nip.io
+    http:
       paths:
       - path: /hr
         pathType: Prefix
@@ -32,6 +44,7 @@ spec:
             name: workflow-service
             port:
               number: 80
+
       - path: /ai
         pathType: Prefix
         backend:
@@ -39,6 +52,7 @@ spec:
             name: ai-service
             port:
               number: 80
+
       - path: /admin
         pathType: Prefix
         backend:
@@ -46,6 +60,7 @@ spec:
             name: admin-service
             port:
               number: 80
+
       - path: /config
         pathType: Prefix
         backend:
@@ -53,6 +68,7 @@ spec:
             name: config-server-service
             port:
               number: 8888
+
       - path: /user-activity
         pathType: Prefix
         backend:
@@ -60,6 +76,7 @@ spec:
             name: user-activity-service
             port:
               number: 80
+
       - path: /mail
         pathType: Prefix
         backend:
