@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: hr-container
-        image: dthieudocker/hr-service:k8s_v4
+        image: dthieudocker/hr-service:29d9ce04471b4cdebeb233e8cbe90db4437f8f4f
         ports:
         - containerPort: 8080
         volumeMounts:

@@ -19,7 +19,7 @@ spec:
       serviceAccountName: admin-sa # <--- B?N CH? C?N THÊM DÒNG NÀY
       containers:
       - name: admin-container
-        image: dthieudocker/admin-service:k8s_v14
+        image: dthieudocker/admin-service:86f9adf01043d31b4b92d52cd636febd5ce0178d
         ports:
         - containerPort: 8080
         volumeMounts:
