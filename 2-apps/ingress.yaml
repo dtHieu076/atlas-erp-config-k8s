@@ -5,6 +5,7 @@ metadata:
   namespace: default
   annotations:
     konghq.com/strip-path: "true"
+    konghq.com/plugins: cors-global # Áp dụng plugin CORS cho tất cả API
     # Gọi cert-manager cấp chứng chỉ SSL
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:

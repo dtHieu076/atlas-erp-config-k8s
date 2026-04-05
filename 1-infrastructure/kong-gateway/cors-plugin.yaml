@@ -1,0 +1,19 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: cors-global
+  namespace: default
+config:
+  origins:
+    - https://adminfrontend-bice-eta.vercel.app
+  methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
+  headers:
+    - Authorization
+    - Content-Type
+  credentials: true
+plugin: cors
