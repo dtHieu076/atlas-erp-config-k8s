@@ -20,3 +20,5 @@ spec:
         env:
         - name: JAVA_TOOL_OPTIONS
           value: "-Djava.net.preferIPv4Stack=true -Dio.netty.resolver.dns.preferIpv4=true"
+        - name: MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED
+          value: "false"
