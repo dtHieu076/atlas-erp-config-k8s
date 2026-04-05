@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: user-activity-container
-        image: dthieudocker/user-activity-service:aa02994538122a381280e2f9d285adf876cbbdc8
+        image: dthieudocker/user-activity-service:7b0da9cd0bacce951eb2859b1010acd31d157d9c
         ports:
         - containerPort: 8080
         volumeMounts:
