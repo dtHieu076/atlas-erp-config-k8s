@@ -17,3 +17,6 @@ spec:
         image: dthieudocker/ai-service:9701140d71a5d98db55a8a2650c5478611dc5c46
         ports:
         - containerPort: 8080
+        env:
+        - name: JAVA_TOOL_OPTIONS
+          value: "-Djava.net.preferIPv4Stack=true -Dio.netty.resolver.dns.preferIpv4=true"
