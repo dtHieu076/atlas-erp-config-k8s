@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: ai-container
-        image: dthieudocker/ai-service:09d509dd7e6693a07e17dcd32b102e1fd6cef41a
+        image: dthieudocker/ai-service:66c63b42ce1ff61a213b51527400e47fe04d0299
         ports:
         - containerPort: 8080
