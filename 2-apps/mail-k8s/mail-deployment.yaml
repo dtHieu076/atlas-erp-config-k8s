@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: mail-container
-        image: dthieudocker/mail-service:6e37441416973ffea86771991e9b0df4705fc0e2
+        image: dthieudocker/mail-service:22ad0cd76a4eb9beabdc7304c2c47da95c7cd7ee
         imagePullPolicy: Always  # Ép K8s luôn kéo image m?i nh?t n?u b?n có l? ghi dè tag v2
         ports:
         - containerPort: 8080
