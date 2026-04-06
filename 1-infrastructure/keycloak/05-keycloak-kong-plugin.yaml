@@ -1,0 +1,30 @@
+# (Tùy chọn) Cấu hình plugin của Kong nếu cần
+
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: keycloak-cors-plugin
+  namespace: default
+config:
+  origins:
+  - "*"
+  methods:
+  - GET
+  - POST
+  - PUT
+  - PATCH
+  - DELETE
+  - OPTIONS
+  headers:
+  - Accept
+  - Accept-Version
+  - Content-Length
+  - Content-MD5
+  - Content-Type
+  - Date
+  - Authorization
+  exposed_headers:
+  - Authorization
+  credentials: true
+  max_age: 3600
+plugin: cors

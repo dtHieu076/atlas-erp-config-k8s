@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak-ingress
+  namespace: default
+  annotations:
+    konghq.com/strip-path: "false"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # Gọi plugin CORS bạn vừa tạo ở file 05
+    konghq.com/plugins: keycloak-cors-plugin
+spec:
+  ingressClassName: kong
+  tls: 
+  - hosts:
+    - keycloak.103.72.99.195.nip.io
+    secretName: keycloak-tls-secret 
+  rules:
+  - host: keycloak.103.72.99.195.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: keycloak-service
+            port:
+              number: 8080
