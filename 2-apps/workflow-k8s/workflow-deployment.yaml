@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: workflow-container
-        image: dthieudocker/workflow-service:k8s_v2
+        image: dthieudocker/workflow-service:af495ea1d0c1bf36808b8b677e6a2396e368ffdc
         ports:
         - containerPort: 8080
