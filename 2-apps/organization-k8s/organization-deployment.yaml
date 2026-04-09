@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: organization-container
-        image: dthieudocker/organization-service:k8s_v3
+        image: dthieudocker/organization-service:05c856102968618eaa95dabb80bd5926a11c5820
         ports:
         - containerPort: 8080
