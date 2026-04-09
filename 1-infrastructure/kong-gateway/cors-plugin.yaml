@@ -6,6 +6,7 @@ metadata:
 config:
   origins:
     - https://adminfrontend-bice-eta.vercel.app
+    - https://hrfrontendv1.netlify.app
   methods:
     - GET
     - POST
