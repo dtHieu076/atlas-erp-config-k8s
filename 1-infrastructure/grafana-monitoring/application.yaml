@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana-k8s-monitoring
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "5" # Chạy trước hoặc cùng wave với các app hạ tầng khác
+spec:
+  project: default
+  source:
+    repoURL: 'https://grafana.github.io/helm-charts'
+    targetRevision: 1.6.13 # Nên fix version cụ thể thay vì dùng ^3 để hệ thống ổn định
+    chart: k8s-monitoring
+    helm:
+      # Nếu bạn để file values.yaml cùng thư mục với file này trong Git
+      valueFiles:
+        - values.yaml 
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
