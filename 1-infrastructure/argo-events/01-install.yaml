@@ -8,11 +8,14 @@ spec:
   source:
     repoURL: https://github.com/argoproj/argo-events.git
     targetRevision: stable
-    path: manifests/namespace-install # Cài đặt bản chuẩn
+    path: manifests/namespace-install
   destination:
     server: https://kubernetes.default.svc
-    namespace: argo
+    namespace: argo # Bạn muốn cài vào đây
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - NamespaceAutoPropagation=true # Tự động đẩy namespace destination vào các resource con
