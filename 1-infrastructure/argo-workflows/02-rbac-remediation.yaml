@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: remediation-sa
+  namespace: argo # Chạy trong namespace của Argo
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: remediation-role
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "patch"] # Chỉ cho phép xem và cập nhật (để restart)
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: remediation-rolebinding
+subjects:
+- kind: ServiceAccount
+  name: remediation-sa
+  namespace: argo
+roleRef:
+  kind: ClusterRole
+  name: remediation-role
+  apiGroup: rbac.authorization.k8s.io

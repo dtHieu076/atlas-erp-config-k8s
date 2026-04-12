@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: remediation-sensor
+  namespace: argo
+spec:
+  template:
+    serviceAccountName: argo-events-sa
+  dependencies:
+    - name: grafana-dep
+      eventName: alert
+      eventSourceName: grafana-webhook
+  triggers:
+    - template:
+        name: trigger-restart-workflow
+        k8s:
+          operation: create
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: auto-restart-
+                namespace: argo
+              spec:
+                workflowTemplateRef:
+                  name: restart-deployment-template # Gọi file số 2
+                arguments:
+                  parameters:
+                  # Bóc tách tên App từ JSON Payload của Grafana Alert
+                  # Giả sử trong Alert Rule bạn có cấu hình label "app=ai-k8s"
+                  - name: target-app
+                    valueFrom:
+                      event: grafana-dep
+                      path: body.alerts.0.labels.app 
+                  - name: target-namespace
+                    value: "default" # Hoặc trích xuất từ payload nếu cần
+      # ĐIỀU KIỆN KÍCH HOẠT (Filter)
+      retryStrategy:
+        steps: 3
+      policy:
+        k8s:
+          labels:
+            type: auto-remediation
+      filters:
+        data:
+          - path: body.status
+            type: string
+            value:
+              - firing # Chỉ kích hoạt khi Alert đang nổ (không phải lúc resolved)
+          - path: body.alerts.0.labels.alertname
+            type: string
+            value:
+              - TooManyConnections # Tên của Alert Rule trên Grafana phải khớp với tên này
+              - MemoryLeakWarning

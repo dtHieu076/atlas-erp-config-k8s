@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: scale-up-template
+  namespace: argo
+spec:
+  serviceAccountName: remediation-sa # Dùng quyền ở file 02-rbac
+  entrypoint: scale-job
+  arguments:
+    parameters:
+    - name: target-app
+      value: "admin-k8s"
+    - name: target-namespace
+      value: "default"
+    - name: desired-replicas
+      value: "5" # Tăng lên 5 Pod
+  templates:
+  - name: scale-job
+    inputs:
+      parameters:
+      - name: target-app
+      - name: target-namespace
+      - name: desired-replicas
+    container:
+      image: bitnami/kubectl:latest
+      command: [sh, -c]
+      args: 
+      - |
+        echo "Hệ thống đang quá tải! Tự động Scale {{inputs.parameters.target-app}} lên {{inputs.parameters.desired-replicas}} replicas."
+        kubectl scale deployment/{{inputs.parameters.target-app}} --replicas={{inputs.parameters.desired-replicas}} -n {{inputs.parameters.target-namespace}}

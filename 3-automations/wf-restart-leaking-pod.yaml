@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: restart-deployment-template
+  namespace: argo
+spec:
+  serviceAccountName: remediation-sa # Dùng tài khoản đã tạo ở Bước 1
+  entrypoint: restart-job
+  arguments:
+    parameters:
+    - name: target-app
+      value: "ai-k8s" # Giá trị mặc định an toàn
+    - name: target-namespace
+      value: "default"
+  templates:
+  - name: restart-job
+    inputs:
+      parameters:
+      - name: target-app
+      - name: target-namespace
+    container:
+      image: bitnami/kubectl:latest # Dùng image chứa sẵn công cụ kubectl
+      command: [sh, -c]
+      args: 
+      - |
+        echo "Bắt đầu chiến dịch Restart Deployment: {{inputs.parameters.target-app}} tại namespace {{inputs.parameters.target-namespace}}"
+        kubectl rollout restart deployment/{{inputs.parameters.target-app}} -n {{inputs.parameters.target-namespace}}
+        echo "Restart thành công! Đã giải phóng RAM/Connection."

@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-webhook-ingress
+  namespace: argo
+spec:
+  ingressClassName: nginx # Hoặc traefik/kong tùy bạn đang dùng ở K3s
+  rules:
+  - host: webhook.yourdomain.local # Đổi thành domain hoặc IP nội bộ của bạn
+    http:
+      paths:
+      - path: /grafana
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana-webhook-eventsource-svc # Service này tự sinh ra khi chạy file 03-eventsource
+            port:
+              number: 12000

@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: clear-disk-template
+  namespace: argo
+spec:
+  entrypoint: clear-disk-job
+  arguments:
+    parameters:
+    - name: target-node # Tên của Server/Node bị đầy ổ cứng
+      value: "k3s-worker-1" 
+  templates:
+  - name: clear-disk-job
+    inputs:
+      parameters:
+      - name: target-node
+    # Dùng nodeSelector để ép Pod này chạy ĐÚNG trên cái server bị đầy
+    nodeSelector:
+      kubernetes.io/hostname: "{{inputs.parameters.target-node}}"
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args: 
+      - |
+        echo "Đang dọn dẹp ổ cứng cho Node: {{inputs.parameters.target-node}}"
+        # Xóa các file log tạm thời trên host
+        rm -rf /host-tmp/* echo "Dọn dẹp hoàn tất!"
+      volumeMounts:
+      - name: host-tmp
+        mountPath: /host-tmp
+    volumes:
+    - name: host-tmp
+      hostPath:
+        path: /tmp # Gắn thư mục /tmp của máy chủ vật lý vào trong Pod
+        type: Directory
