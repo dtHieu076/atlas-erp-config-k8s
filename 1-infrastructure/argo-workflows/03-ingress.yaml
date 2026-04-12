@@ -5,14 +5,11 @@ metadata:
   namespace: argo
   annotations:
     kubernetes.io/ingress.class: "kong"
-    konghq.com/protocol: "https" # Argo Server mặc định dùng HTTPS nội bộ
-    konghq.com/override: "argo-server-kong-config" # Nếu bạn có cấu hình riêng
+    konghq.com/protocol: "https" # Vẫn giữ nguyên dòng này vì Argo dùng HTTPS nội bộ
+    konghq.com/override: "argo-server-kong-config"
 spec:
   ingressClassName: kong
-  tls:
-  - hosts:
-    - workflow.103.72.99.195.nip.io
-    secretName: argo-workflow-tls
+  # ĐÃ XÓA ĐOẠN TLS Ở ĐÂY
   rules:
   - host: workflow.103.72.99.195.nip.io
     http:
