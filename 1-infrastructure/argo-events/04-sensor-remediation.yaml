@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Sensor
 metadata:
   name: remediation-sensor
-  namespace: argo
+  namespace: argo-events
 spec:
   template:
     serviceAccountName: remediation-sa
