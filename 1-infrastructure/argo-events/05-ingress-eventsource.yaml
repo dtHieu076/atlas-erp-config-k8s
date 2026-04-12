@@ -3,16 +3,27 @@ kind: Ingress
 metadata:
   name: grafana-webhook-ingress
   namespace: argo
+  annotations:
+    # Chỉ định dùng Kong
+    kubernetes.io/ingress.class: "kong"
+    # Nếu bạn muốn dùng HTTPS giống ArgoCD thì giữ lại dòng cert-manager
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    konghq.com/protocol: "http"
+    konghq.com/strip-path: "false" 
 spec:
-  ingressClassName: nginx # Hoặc traefik/kong tùy bạn đang dùng ở K3s
+  ingressClassName: kong # ĐỔI TỪ nginx SANG kong
+  tls:
+  - hosts:
+    - webhook.103.72.99.195.nip.io # Domain cho Webhook
+    secretName: grafana-webhook-tls
   rules:
-  - host: webhook.yourdomain.local # Đổi thành domain hoặc IP nội bộ của bạn
+  - host: webhook.103.72.99.195.nip.io
     http:
       paths:
       - path: /grafana
         pathType: Prefix
         backend:
           service:
-            name: grafana-webhook-eventsource-svc # Service này tự sinh ra khi chạy file 03-eventsource
+            name: grafana-webhook-eventsource-svc
             port:
               number: 12000
