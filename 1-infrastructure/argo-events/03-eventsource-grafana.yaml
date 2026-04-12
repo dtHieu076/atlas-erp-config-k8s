@@ -4,7 +4,7 @@ metadata:
   name: grafana-webhook
   namespace: argo
 spec:
-  serviceAccountName: argo-events-sa
+  serviceAccountName: remediation-sa
   webhook:
     # Định nghĩa 1 endpoint tên là 'alert'
     alert: 

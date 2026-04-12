@@ -5,7 +5,7 @@ metadata:
   namespace: argo
 spec:
   template:
-    serviceAccountName: argo-events-sa
+    serviceAccountName: remediation-sa
   dependencies:
     - name: grafana-dep
       eventName: alert
