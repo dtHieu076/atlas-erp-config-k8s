@@ -5,8 +5,12 @@ metadata:
   namespace: argo-events
 spec:
   serviceAccountName: remediation-sa
+  # THÊM ĐOẠN NÀY ĐỂ TẠO SERVICE
+  service:
+    ports:
+      - port: 12000
+        targetPort: 12000
   webhook:
-    # Định nghĩa 1 endpoint tên là 'alert'
     alert: 
       port: "12000"
       endpoint: /grafana
