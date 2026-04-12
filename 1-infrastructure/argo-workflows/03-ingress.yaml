@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argo-workflow-server-ingress
+  namespace: argo
+  annotations:
+    kubernetes.io/ingress.class: "kong"
+    konghq.com/protocol: "https" # Argo Server mặc định dùng HTTPS nội bộ
+    konghq.com/override: "argo-server-kong-config" # Nếu bạn có cấu hình riêng
+spec:
+  ingressClassName: kong
+  tls:
+  - hosts:
+    - workflow.103.72.99.195.nip.io
+    secretName: argo-workflow-tls
+  rules:
+  - host: workflow.103.72.99.195.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: argo-server
+            port:
+              number: 2746
