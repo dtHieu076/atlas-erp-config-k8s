@@ -11,7 +11,7 @@ spec:
     path: manifests/namespace-install
   destination:
     server: https://kubernetes.default.svc
-    namespace: argo # Bạn muốn cài vào đây
+    namespace: argo-events # Bạn muốn cài vào đây
   syncPolicy:
     automated:
       prune: true
