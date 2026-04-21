@@ -5,7 +5,7 @@ metadata:
   labels:
     app: mail-api
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: mail-api
@@ -14,29 +14,29 @@ spec:
       labels:
         app: mail-api
       annotations:
-        # Giúp Velero nh?n di?n volume d? backup
+        # Giï¿½p Velero nh?n di?n volume d? backup
         backup.velero.io/backup-volumes: backup-storage
     spec:
       containers:
-      - name: mail-container
-        image: dthieudocker/mail-service:b9fbdc307267f99360ba7f5ef7013eef645ba97f
-        imagePullPolicy: Always  # Ép K8s luôn kéo image m?i nh?t n?u b?n có l? ghi dè tag v2
-        ports:
-        - containerPort: 8080
-        env:
-        # ==========================================================
-        # PH?N THÊM M?I: Ép Spring Boot k?t n?i sang MailHog Service
-        # ==========================================================
-        - name: SPRING_MAIL_HOST
-          value: "mailhog-service"
-        - name: SPRING_MAIL_PORT
-          value: "1025"
-        # ==========================================================
-        volumeMounts:
-        # Mount vào dúng thu m?c Java ghi file
-        - name: backup-storage
-          mountPath: /app/backups
+        - name: mail-container
+          image: dthieudocker/mail-service:b9fbdc307267f99360ba7f5ef7013eef645ba97f
+          imagePullPolicy: Always # ï¿½p K8s luï¿½n kï¿½o image m?i nh?t n?u b?n cï¿½ l? ghi dï¿½ tag v2
+          ports:
+            - containerPort: 8080
+          env:
+            # ==========================================================
+            # PH?N THï¿½M M?I: ï¿½p Spring Boot k?t n?i sang MailHog Service
+            # ==========================================================
+            - name: SPRING_MAIL_HOST
+              value: "mailhog-service"
+            - name: SPRING_MAIL_PORT
+              value: "1025"
+            # ==========================================================
+          volumeMounts:
+            # Mount vï¿½o dï¿½ng thu m?c Java ghi file
+            - name: backup-storage
+              mountPath: /app/backups
       volumes:
-      - name: backup-storage
-        persistentVolumeClaim:
-          claimName: shared-backup-pvc
+        - name: backup-storage
+          persistentVolumeClaim:
+            claimName: shared-backup-pvc
