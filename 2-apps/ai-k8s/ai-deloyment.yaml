@@ -13,12 +13,12 @@ spec:
         app: ai-api
     spec:
       containers:
-      - name: ai-container
-        image: dthieudocker/ai-service:40a10d4c415ec5a7d160d6d1722ae395863b86cd
-        ports:
-        - containerPort: 8080
-        env:
-        - name: JAVA_TOOL_OPTIONS
-          value: "-Djava.net.preferIPv4Stack=true -Dio.netty.resolver.dns.preferIpv4=true"
-        - name: MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED
-          value: "false"
+        - name: ai-container
+          image: dthieudocker/ai-service:c8e7505c62d45ebeeb96c287f8351abbf699ddfa
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Djava.net.preferIPv4Stack=true -Dio.netty.resolver.dns.preferIpv4=true"
+            - name: MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED
+              value: "false"
