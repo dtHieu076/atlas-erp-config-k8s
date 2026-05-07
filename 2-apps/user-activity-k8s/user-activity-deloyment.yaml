@@ -5,7 +5,7 @@ metadata:
   labels:
     app: user-activity-api
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: user-activity-api
@@ -17,14 +17,14 @@ spec:
         backup.velero.io/backup-volumes: backup-storage
     spec:
       containers:
-      - name: user-activity-container
-        image: dthieudocker/user-activity-service:01f5e02976e496a8a1469c5637b422267b9480ab
-        ports:
-        - containerPort: 8080
-        volumeMounts:
-        - name: backup-storage
-          mountPath: /app/backups
+        - name: user-activity-container
+          image: dthieudocker/user-activity-service:01f5e02976e496a8a1469c5637b422267b9480ab
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: backup-storage
+              mountPath: /app/backups
       volumes:
-      - name: backup-storage
-        persistentVolumeClaim:
-          claimName: shared-backup-pvc
+        - name: backup-storage
+          persistentVolumeClaim:
+            claimName: shared-backup-pvc
